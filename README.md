@@ -4,6 +4,6 @@
 
 Mohini Dutta
 
-Peter Windas edited
+Peter Windas
 
 Matthew Bae
