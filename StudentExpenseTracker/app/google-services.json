@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "597568563999",
+    "firebase_url": "https://studentexpensetracker-72e15.firebaseio.com",
+    "project_id": "studentexpensetracker-72e15",
+    "storage_bucket": "studentexpensetracker-72e15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597568563999:android:4411d98c46a395ab2e9e2a",
+        "android_client_info": {
+          "package_name": "com.example.studentexpensetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597568563999-s5add93u3pu0f6ssv1ivvlal07um10b6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkb2kr36TMxdkOOtapoGFxYjnTSW24sZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597568563999-s5add93u3pu0f6ssv1ivvlal07um10b6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
