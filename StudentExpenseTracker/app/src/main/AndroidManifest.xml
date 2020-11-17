@@ -13,21 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".Validators"></activity>
-        <activity android:name=".TitleList" />
-        <activity android:name=".Title" />
-        <activity android:name=".RegistrationActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".DashboardActivity" />
-        <activity android:name=".AuthorList" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.studentexpensetracker.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AuthorActivity" />
+        <activity android:name="com.example.studentexpensetracker.LoginActivity" />
+        <activity android:name="com.example.studentexpensetracker.RegistrationActivity" />
+        <activity android:name="com.example.studentexpensetracker.DashboardActivity" />
+        <activity android:name="com.example.studentexpensetracker.AuthorActivity" />
     </application>
 
 </manifest>
