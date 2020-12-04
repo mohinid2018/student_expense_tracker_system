@@ -15,29 +15,31 @@
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_author_name"
+        android:hint="@string/enter_expense"
         android:inputType="text"
         android:importantForAutofill="no" />
 
-    <Spinner
-        android:id="@+id/spinnerCountry"
+    <EditText
+        android:id="@+id/editLocationName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextName"
-        android:entries="@array/countries" />
+        android:hint="@string/enter_location"
+        android:inputType="text"
+        android:importantForAutofill="no" />
 
     <Button
-        android:id="@+id/buttonAddAuthor"
+        android:id="@+id/buttonAddExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spinnerCountry"
+        android:layout_below="@id/editLocationName"
         android:text="@string/add" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonAddAuthor"
+        android:layout_below="@id/buttonAddExpense"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/authors"
         android:textAlignment="center"
@@ -52,7 +54,7 @@
         android:textAlignment="center" />
 
     <ListView
-        android:id="@+id/listViewAuthors"
+        android:id="@+id/listExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView1" />
