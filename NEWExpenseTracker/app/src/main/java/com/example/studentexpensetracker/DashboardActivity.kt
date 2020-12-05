@@ -16,7 +16,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var editTextName: EditText
     private lateinit var editLocationName: EditText
-    private lateinit var buttonAddAuthor: Button
+    private lateinit var buttonAddExpense: Button
     internal lateinit var listViewAuthors: ListView
 
     internal lateinit var authors: MutableList<Author>
@@ -35,12 +35,12 @@ class DashboardActivity : AppCompatActivity() {
         editTextName = findViewById<View>(R.id.editTextName) as EditText
         editLocationName = findViewById<View>(R.id.editLocationName) as EditText
         listViewAuthors = findViewById<View>(R.id.listViewAuthors) as ListView
-        buttonAddAuthor = findViewById<View>(R.id.buttonAddAuthor) as Button
+        buttonAddExpense = findViewById<View>(R.id.buttonAddExpense) as Button
 
         authors = ArrayList()
         uid = intent.getStringExtra(USER_ID)!!
 
-        buttonAddAuthor.setOnClickListener {
+        buttonAddExpense.setOnClickListener {
             addAuthor()
         }
 
