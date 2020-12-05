@@ -72,7 +72,20 @@
         android:layout_width="432dp"
         android:layout_height="52dp"
         android:text="@string/login"
+<<<<<<< HEAD
         android:textColor="@color/common_google_signin_btn_text_light_default"
+=======
+<<<<<<< HEAD
+        android:textColor="#000000"
+        android:background="#D0D0D0"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register"
+=======
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+>>>>>>> 9105e44e3be3d30afcf05f5ce17df433b6c0c689
+>>>>>>> 0053a03812282d9615ee13978cf19bb2d9cd0951
         app:layout_constraintBottom_toTopOf="@+id/final_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
