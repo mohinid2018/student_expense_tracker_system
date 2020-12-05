@@ -60,7 +60,7 @@
         android:text="@string/register"
         android:textColor="#FFFFFF"
         android:background="#6363E6"
-        android:gravity="center"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/init_text_box"
@@ -72,19 +72,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:textColor="@color/common_google_signin_btn_text_light_default"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register"
+        android:textColor="#000000"
+        android:background="#D0D0D0"
+
         app:layout_constraintBottom_toTopOf="@+id/final_text"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/register"
+        app:layout_constraintStart_toStartOf="@+id/register"
+        app:layout_constraintTop_toBottomOf="@+id/register" />
 
     <TextView
         android:id="@+id/final_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="An Android Studio Project Created by\nMatthew Bae\nMohini Dutta\nPeter Windas"
-        android:gravity="center"
+        android:textAlignment="center"
+        android:gravity="bottom"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
