@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/mohinidutta/cmsc436-mdutta/student_expense_tracker_system/ExpenseTracker/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v28/values-v28.xml",
+            "outputFile": "/Users/mohinidutta/Desktop/CMSC436/student_expense_tracker_system-main/ExpenseTracker/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v28/values-v28.xml",
             "map": [
                 {
-                    "source": "/Users/mohinidutta/.gradle/caches/transforms-2/files-2.1/149e18e44fa746197e35426273af60eb/appcompat-1.2.0/res/values-v28/values-v28.xml",
+                    "source": "/Users/mohinidutta/.gradle/caches/transforms-2/files-2.1/86b8749d2645f9d56b72c10bf64a434b/appcompat-1.2.0/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,8",
                         "startColumns": "4,4,4,4",
