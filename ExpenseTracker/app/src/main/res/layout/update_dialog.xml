@@ -13,11 +13,6 @@
         android:inputType="text"
         android:importantForAutofill="no" />
 
-    <Spinner
-        android:id="@+id/spinnerCountry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/countries" />
 
     <LinearLayout
         android:layout_width="match_parent"

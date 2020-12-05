@@ -10,7 +10,7 @@ import com.google.firebase.database.*
 import java.lang.Exception
 import java.util.*
 
-class AuthorActivity : AppCompatActivity() {
+class ExpenseActivity : AppCompatActivity() {
     private lateinit var buttonAddTitle: Button
     private lateinit var editTextTitleName: EditText
     private lateinit var seekBarRating: SeekBar
@@ -28,14 +28,9 @@ class AuthorActivity : AppCompatActivity() {
 
         val intent = intent
 
-        /*
-         * this line is important
-         * this time we are not getting the reference of a direct node
-         * but inside the node track we are creating a new child with the author id
-         * and inside that node we will store all the titles with unique ids
-         * */
+
         databaseTitles = FirebaseDatabase.getInstance().getReference("titles").child(intent.getStringExtra(
-            AUTHOR_ID
+            EXPENSE_ID
         )!!)
 
         buttonAddTitle = findViewById<View>(R.id.buttonAddTitle) as Button
@@ -47,7 +42,7 @@ class AuthorActivity : AppCompatActivity() {
 
         titles = ArrayList()
 
-        textViewAuthor.text = intent.getStringExtra(AUTHOR_NAME)
+        textViewAuthor.text = intent.getStringExtra(EXPENSE_NAME)
 
         seekBarRating.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -83,12 +78,12 @@ class AuthorActivity : AppCompatActivity() {
                         titles.add(title!!)
                     }
                 }
-                val titleListAdapter = TitleList(this@AuthorActivity, titles)
+                val titleListAdapter = TitleList(this@ExpenseActivity, titles)
                 listViewTitles.adapter = titleListAdapter
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // do nothing
+
             }
         })
     }
@@ -109,7 +104,7 @@ class AuthorActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "Lab-Firebase"
-        const val AUTHOR_NAME = "com.example.tesla.myhomelibrary.authorname"
-        const val AUTHOR_ID = "com.example.tesla.myhomelibrary.authorid"
+        const val EXPENSE_NAME = "com.example.tesla.myhomelibrary.authorname"
+        const val EXPENSE_ID = "com.example.tesla.myhomelibrary.authorid"
     }
 }

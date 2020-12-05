@@ -15,13 +15,13 @@ import java.util.*
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var editTextName: EditText
-    private lateinit var spinnerCountry: Spinner
-    private lateinit var buttonAddAuthor: Button
-    internal lateinit var listViewAuthors: ListView
+    private lateinit var editLocationName: EditText
+    private lateinit var buttonAddExpense: Button
+    internal lateinit var listOfExpenses: ListView
 
-    internal lateinit var authors: MutableList<Author>
+    internal lateinit var expenses: MutableList<Expense>
 
-    private lateinit var databaseAuthors: DatabaseReference
+    private lateinit var database: DatabaseReference
 
     private lateinit var uid: String
 
@@ -29,43 +29,42 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        //getting the reference of artists node
-        databaseAuthors = FirebaseDatabase.getInstance().getReference("authors")
+        database = FirebaseDatabase.getInstance().getReference("authors")
 
         editTextName = findViewById<View>(R.id.editTextName) as EditText
-        spinnerCountry = findViewById<View>(R.id.spinnerCountry) as Spinner
-        listViewAuthors = findViewById<View>(R.id.listViewAuthors) as ListView
-        buttonAddAuthor = findViewById<View>(R.id.buttonAddAuthor) as Button
+        editLocationName = findViewById<View>(R.id.editLocationName) as EditText
+        listOfExpenses = findViewById<View>(R.id.listExpense) as ListView
+        buttonAddExpense = findViewById<View>(R.id.buttonAddExpense) as Button
 
-        authors = ArrayList()
+        expenses = ArrayList()
         uid = intent.getStringExtra(USER_ID)!!
 
-        buttonAddAuthor.setOnClickListener {
-            addAuthor()
+        buttonAddExpense.setOnClickListener {
+            addExpense()
         }
 
-        //attaching listener to ListView
-        listViewAuthors.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            //getting the selected artist
-            val author = authors[i]
 
-            //creating an intent
-            val intent = Intent(applicationContext, AuthorActivity::class.java)
+       listOfExpenses.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
 
-            intent.putExtra(AUTHOR_ID, author.authorId)
-            intent.putExtra(AUTHOR_NAME, author.authorName)
+            val expense = expenses[i]
+
+
+            val intent = Intent(applicationContext, ExpenseActivity::class.java)
+
+            intent.putExtra(EXPENSE_ID, expense.expenseId)
+            intent.putExtra(EXPENSE_NUM, expense.expenseNum)
             intent.putExtra(USER_ID, USER_ID)
             startActivity(intent)
         }
 
-        listViewAuthors.onItemLongClickListener = AdapterView.OnItemLongClickListener { adapterView, view, i, l ->
-            val author = authors[i]
-            showUpdateDeleteDialog(author.authorId, author.authorName)
+        listOfExpenses.onItemLongClickListener = AdapterView.OnItemLongClickListener { adapterView, view, i, l ->
+            val expense = expenses[i]
+            showUpdateDeleteDialog(expense.expenseId, expense.expenseNum)
             true
         }
     }
 
-    private fun showUpdateDeleteDialog(authorId: String, authorName: String) {
+    private fun showUpdateDeleteDialog(expenseId: String, expenseNum: String) {
 
         val dialogBuilder = AlertDialog.Builder(this)
         val inflater = layoutInflater
@@ -73,85 +72,85 @@ class DashboardActivity : AppCompatActivity() {
         dialogBuilder.setView(dialogView)
 
         val editTextName = dialogView.findViewById<View>(R.id.editTextName) as EditText
-        val spinnerCountry = dialogView.findViewById<View>(R.id.spinnerCountry) as Spinner
+        val editLocationName = dialogView.findViewById<View>(R.id.editLocationName) as EditText
         val buttonUpdate = dialogView.findViewById<View>(R.id.buttonUpdateAuthor) as Button
         val buttonDelete = dialogView.findViewById<View>(R.id.buttonDeleteAuthor) as Button
 
-        dialogBuilder.setTitle(authorName)
+        dialogBuilder.setTitle(expenseNum)
         val b = dialogBuilder.create()
         b.show()
 
-        // TODO: Set update listener
+
         buttonUpdate.setOnClickListener {
-            val name = editTextName.text.toString().trim{it <= ' '}
-            val country = spinnerCountry.selectedItem.toString()
-            if (!TextUtils.isEmpty(name)){
-                updateAuthor(authorId, uid, name, country)
+            val expense = editTextName.text.toString().trim{it <= ' '}
+            val location = editLocationName.text.toString().trim{it <= ' '}
+            if (!TextUtils.isEmpty(expense)){
+                updateExpense(expenseId, uid, expense, location)
                 b.dismiss()
             }
         }
 
-        // TODO: Set delete listener
+
         buttonDelete.setOnClickListener {
-            deleteAuthor(authorId)
+            deleteExpense(expenseId)
             b.dismiss()
         }
     }
 
-    // TODO: Add an author
-    private fun addAuthor() {
-        val name = editTextName.text.toString().trim { it <= ' ' }
-        val country = spinnerCountry.selectedItem.toString()
-        if (!TextUtils.isEmpty(name)) {
-            val id = databaseAuthors.push().key
-            val author = Author(id!!, name, country)
-            databaseAuthors.child(uid).child(id).setValue(author)
+
+    private fun addExpense() {
+        val expense = editTextName.text.toString().trim { it <= ' ' }
+        val location = editLocationName.text.toString().trim { it <= ' ' }
+        if (!TextUtils.isEmpty(expense)) {
+            val id = database.push().key
+            val expense = Expense(id!!, expense, location)
+            database.child(uid).child(id).setValue(expense)
             editTextName.setText("")
-            Toast.makeText(this, "Author added", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Thank you. Your expense has been successfully added", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(this, "Please enter a name", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please enter an expense", Toast.LENGTH_LONG).show()
         }
     }
 
-    // TODO: Update an author
-    private fun updateAuthor(id: String, uid: String, name: String, country: String): Boolean {
+
+    private fun updateExpense(id: String, uid: String, expense: String, loc: String): Boolean {
         val dR = FirebaseDatabase.getInstance().getReference("authors").child(uid).child(id)
-        val author = Author(id, name, country)
-        dR.setValue(author)
-        Toast.makeText(applicationContext, "Author Updated", Toast.LENGTH_LONG).show()
+        val expense = Expense(id, expense, loc)
+        dR.setValue(expense)
+        Toast.makeText(applicationContext, "Your expense has become updated", Toast.LENGTH_LONG).show()
         return true
     }
 
-    // TODO: Delete an author
-    private fun deleteAuthor(id: String): Boolean {
+
+    private fun deleteExpense(id: String): Boolean {
         val dR = FirebaseDatabase.getInstance().getReference("authors").child(uid).child(id)
         dR.removeValue()
         val drTitles = FirebaseDatabase.getInstance().getReference("titles").child(uid).child(id)
         drTitles.removeValue()
-        Toast.makeText(applicationContext, "Author Deleted", Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, "Success! This expense has been deleted", Toast.LENGTH_LONG).show()
         return true
     }
 
     override fun onStart() {
         super.onStart()
 
-        databaseAuthors.addValueEventListener(object : ValueEventListener {
+        database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                authors.clear()
+                expenses.clear()
 
-                var author: Author? = null
+                var expense: Expense? = null
                 for (postSnapshot in dataSnapshot.child(uid).children) {
                     try {
-                        author = postSnapshot.getValue(Author::class.java)
+                        expense = postSnapshot.getValue(Expense::class.java)
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
                     } finally {
-                        authors.add(author!!)
+                        expenses.add(expense!!)
                     }
                 }
 
-                val authorAdapter = AuthorList(this@DashboardActivity, authors)
-                listViewAuthors.adapter = authorAdapter
+                val adapter = ExpenseList(this@DashboardActivity, expenses)
+                listOfExpenses.adapter = adapter
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -162,8 +161,8 @@ class DashboardActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "Lab-Firebase"
-        const val AUTHOR_NAME = "com.example.tesla.myhomelibrary.authorname"
-        const val AUTHOR_ID = "com.example.tesla.myhomelibrary.authorid"
+        const val EXPENSE_NUM = "com.example.tesla.myhomelibrary.authorname"
+        const val EXPENSE_ID = "com.example.tesla.myhomelibrary.authorid"
         const val USER_ID = "com.example.tesla.myhomelibrary.userid"
     }
 }

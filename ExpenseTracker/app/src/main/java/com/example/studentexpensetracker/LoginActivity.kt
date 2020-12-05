@@ -38,9 +38,6 @@ class LoginActivity : AppCompatActivity() {
         loginBtn!!.setOnClickListener { loginUserAccount() }
     }
 
-    // TODO: Allow the user to log into their account
-    // If the email and password are not empty, try to log in
-    // If the login is successful, store info into intent and launch DashboardActivity
     private fun loginUserAccount() {
         progressBar?.visibility ?:  View.VISIBLE
         val email: String = userEmail?.text.toString()
@@ -61,8 +58,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_LONG)
                         .show()
-// pass the mAuth.uid via an intent
-//                    mAuth!!.currentUser?.uid
+
                     startActivity(
                         Intent(this@LoginActivity, DashboardActivity::class.java).putExtra(
                         USER_ID,  mAuth!!.currentUser?.uid))
