@@ -15,7 +15,7 @@ import java.util.*
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var editTextName: EditText
-    private lateinit var spinnerCountry: Spinner
+    private lateinit var editLocationName: EditText
     private lateinit var buttonAddAuthor: Button
     internal lateinit var listViewAuthors: ListView
 
@@ -33,7 +33,7 @@ class DashboardActivity : AppCompatActivity() {
         databaseAuthors = FirebaseDatabase.getInstance().getReference("authors")
 
         editTextName = findViewById<View>(R.id.editTextName) as EditText
-        spinnerCountry = findViewById<View>(R.id.spinnerCountry) as Spinner
+        editLocationName = findViewById<View>(R.id.editLocationName) as EditText
         listViewAuthors = findViewById<View>(R.id.listViewAuthors) as ListView
         buttonAddAuthor = findViewById<View>(R.id.buttonAddAuthor) as Button
 
@@ -73,7 +73,7 @@ class DashboardActivity : AppCompatActivity() {
         dialogBuilder.setView(dialogView)
 
         val editTextName = dialogView.findViewById<View>(R.id.editTextName) as EditText
-        val spinnerCountry = dialogView.findViewById<View>(R.id.spinnerCountry) as Spinner
+        val editLocationName = dialogView.findViewById<View>(R.id.editLocationName) as EditText
         val buttonUpdate = dialogView.findViewById<View>(R.id.buttonUpdateAuthor) as Button
         val buttonDelete = dialogView.findViewById<View>(R.id.buttonDeleteAuthor) as Button
 
@@ -84,8 +84,9 @@ class DashboardActivity : AppCompatActivity() {
         // TODO: Set update listener
         buttonUpdate.setOnClickListener {
             val name = editTextName.text.toString().trim{it <= ' '}
-            val country = spinnerCountry.selectedItem.toString()
-            if (!TextUtils.isEmpty(name)){
+            // val country = spinnerCountry.selectedItem.toString()
+            val country = editLocationName.text.toString().trim{it <= ' '}
+            if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(country)){
                 updateAuthor(authorId, uid, name, country)
                 b.dismiss()
             }
@@ -101,7 +102,8 @@ class DashboardActivity : AppCompatActivity() {
     // TODO: Add an author
     private fun addAuthor() {
         val name = editTextName.text.toString().trim { it <= ' ' }
-        val country = spinnerCountry.selectedItem.toString()
+        // val country = editLocationName.selectedItem.toString()
+        val country =  editLocationName.text.toString().trim { it <= ' ' }
         if (!TextUtils.isEmpty(name)) {
             val id = databaseAuthors.push().key
             val author = Author(id!!, name, country)
