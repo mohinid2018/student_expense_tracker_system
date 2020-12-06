@@ -19,23 +19,27 @@ class Validators {
 
     // TODO: Validate password
     // Passwords should be at least 4 characters with 1 letter and 1 number
-    fun validPassword(password: String?) : Boolean {
+    fun validPassword(password: String?) : Int {
         if (password == null)
-            return false
-        if(password.length < 4 || password.length > 8)
-            return false
-        var x = 0
-        var letter = false
-        var number = false
-        while(x < password.length){
-            if( password[x] in 'a'..'z' || password[x] in 'A'..'Z')
-                letter = true
-            if(password[x] in '0'..'9')
-                number = true
-            x++
-            if(letter && number)
-                return true
+            return 0
+        if(password.length < 6 || password.length > 12)
+            return -1
+        var ind = 0
+        var hasLetter = false
+        var hasNumber = false
+        var hasSymbol = false;
+        while(ind < password.length){
+            if( password[ind] in 'a'..'z' || password[ind] in 'A'..'Z') {
+                hasLetter = true
+            } else if (password[ind] in '0'..'9') {
+                hasNumber = true
+            } else {
+                hasSymbol = true
+            }
+            ind++
+            if(hasLetter && hasNumber && hasSymbol)
+                return 1
         }
-        return false
+        return -2
     }
 }

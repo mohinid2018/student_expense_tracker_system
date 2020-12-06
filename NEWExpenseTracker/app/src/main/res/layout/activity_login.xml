@@ -6,33 +6,46 @@
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="#010147"
     tools:context="com.example.studentexpensetracker.LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/account_login"/>
+        android:background="#D0D0D0"
+        android:textStyle="bold"
+        android:text="  ACCOUNT LOGIN     "
+        android:textColor="#000000" />
+
     <EditText
         android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/email"
+        android:layout_width="379dp"
+        android:layout_height="42dp"
+        android:background="#FFFFFF"
+        android:hint="  Email"
+        android:importantForAutofill="no"
         android:inputType="textEmailAddress"
-        android:importantForAutofill="no" />
+        android:textColor="#000000" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/password"
+        android:layout_width="379dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="14dp"
+        android:background="#FFFFFF"
+        android:hint="  Password"
+        android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:importantForAutofill="no" />
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login" />
+        android:layout_marginTop="24dp"
+        android:text="@string/login"
+        android:textColor="#FFFFFF"
+        android:background="#6363E6"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

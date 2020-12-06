@@ -14,12 +14,10 @@
     <string name="enter_location_name">Enter Location Name (i.e. McDonald\'s)</string>
     <string name="enter_location">Update Location Name</string>
     <string name="add_titles">Add Titles</string>
-    <string name="register_new_account">Register new account</string>
     <string name="expense_explanation">Press and hold an expense to edit it</string>
     <string name="one">1</string>
     <string name="add">Add</string>
     <string name="total_expenses">Total Expenses: </string>
-    <string name="account_login">Account Login</string>
     <string name="delete">Delete</string>
     <string name="email">Email</string>
     <string name="login">Login</string>

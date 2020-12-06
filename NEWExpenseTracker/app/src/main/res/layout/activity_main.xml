@@ -84,7 +84,7 @@
         android:id="@+id/final_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="An Android Studio Project Created by\nMatthew Bae\nMohini Dutta\nPeter Windas"
+        android:text="An Android Studio Project Created by\nMatthew Bae\nMohini Dutta\nPeter Windas\n\n"
         android:textAlignment="center"
         android:gravity="bottom"
         android:textColor="#FFFFFF"

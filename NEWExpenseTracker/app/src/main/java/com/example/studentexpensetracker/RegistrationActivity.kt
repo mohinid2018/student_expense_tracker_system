@@ -43,8 +43,21 @@ class RegistrationActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Please enter a valid email...", Toast.LENGTH_LONG).show()
             return
         }
-        if (!validator.validPassword(password)) {
-            Toast.makeText(applicationContext, "Please enter a valid password!", Toast.LENGTH_LONG).show()
+
+        if (validator.validPassword(password) <= 0) {
+
+            var ret = validator.validPassword(password);
+            when (ret) {
+                0 -> {
+                    Toast.makeText(applicationContext, "Password field appears to be empty. Please reenter your password.", Toast.LENGTH_LONG).show()
+                }
+                -1 -> {
+                    Toast.makeText(applicationContext, "Passwords must be between 6 to 12 characters inclusive. Please try again.", Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    Toast.makeText(applicationContext, "Passwords must be a combination of letters, numbers, and symbols. Please try again.", Toast.LENGTH_LONG).show()
+                }
+            }
             return
         }
 
