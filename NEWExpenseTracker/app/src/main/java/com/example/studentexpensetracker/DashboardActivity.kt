@@ -1,10 +1,12 @@
 package com.example.studentexpensetracker
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -65,12 +67,12 @@ class DashboardActivity : AppCompatActivity() {
 
         listViewAuthors.onItemLongClickListener = AdapterView.OnItemLongClickListener { adapterView, view, i, l ->
             val author = expenses[i]
-            showUpdateDeleteDialog(author.expenseID, author.expenseValue)
+            showUpdateDeleteDialog(author.expenseID, author.expenseValue, author.locationName)
             true
         }
     }
 
-    private fun showUpdateDeleteDialog(expenseID: String, expenseValue: String) {
+    private fun showUpdateDeleteDialog(expenseID: String, expenseValue: String, locationName: String) {
 
         val dialogBuilder = AlertDialog.Builder(this)
         val inflater = layoutInflater
@@ -78,11 +80,13 @@ class DashboardActivity : AppCompatActivity() {
         dialogBuilder.setView(dialogView)
 
         val editTextName = dialogView.findViewById<View>(R.id.editTextName) as EditText
+        editTextName.setText(expenseValue)
         val editLocationName = dialogView.findViewById<View>(R.id.editLocationName) as EditText
+        editLocationName.setText(locationName)
         val buttonUpdate = dialogView.findViewById<View>(R.id.buttonUpdateAuthor) as Button
         val buttonDelete = dialogView.findViewById<View>(R.id.buttonDeleteAuthor) as Button
 
-        dialogBuilder.setTitle(expenseValue)
+        dialogBuilder.setTitle("$$expenseValue at $locationName")
         val b = dialogBuilder.create()
         b.show()
 
@@ -93,10 +97,19 @@ class DashboardActivity : AppCompatActivity() {
             val expense = editTextName.text.toString().trim{it <= ' '}
             // val location = spinnerCountry.selectedItem.toString()
             val location = editLocationName.text.toString().trim{it <= ' '}
-            if (!TextUtils.isEmpty(expense) && !TextUtils.isEmpty(location)){
-                updateAuthor(expenseID, uid, expense, location, oldExpenseValue)
-                b.dismiss()
+
+            val expenseRegex = Regex("\\d+" + "(\\.\\d{1,2})?")
+
+            if (!TextUtils.isEmpty(expense) && !TextUtils.isEmpty(location)) {
+                if (expenseRegex.matches((expense))) {
+                    updateAuthor(expenseID, uid, expense, location, oldExpenseValue)
+                    b.dismiss()
+                } else {
+                    Toast.makeText(this, "Please enter an expense with 0-2 decimal places", Toast.LENGTH_LONG).show()
+                }
             }
+
+
         }
 
         // TODO: Set delete listener
@@ -111,18 +124,34 @@ class DashboardActivity : AppCompatActivity() {
         val expense = editTextName.text.toString().trim { it <= ' ' }
         // val location = editLocationName.selectedItem.toString()
         val location =  editLocationName.text.toString().trim { it <= ' ' }
-        if (!TextUtils.isEmpty(expense)) {
-            val id = databaseExpenses.push().key
-            val author = Expense(id!!, expense, location)
-            val newExpense = expense.toFloat()
-            totalExpenses += newExpense
-            editTotalExpenses.text = "Total Expenses: $" + totalExpenses
-            databaseExpenses.child(uid).child(id).setValue(author)
-            editTextName.setText("")
-            Toast.makeText(this, "Expense added", Toast.LENGTH_LONG).show()
+        if (!TextUtils.isEmpty(expense) && !TextUtils.isEmpty((location))) {
+            val expenseRegex = Regex("\\d+" + "(\\.\\d{1,2})?")
+
+            if (expenseRegex.matches((expense))) {
+                val id = databaseExpenses.push().key
+                val author = Expense(id!!, expense, location)
+                val newExpense = expense.toFloat()
+                totalExpenses += newExpense
+                editTotalExpenses.text = "Total Expenses: $$totalExpenses"
+                databaseExpenses.child(uid).child(id).setValue(author)
+                editTextName.setText("")
+                editLocationName.setText("")
+
+
+
+                Toast.makeText(this, "Expense added", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Please enter an expense with 0-2 decimal places", Toast.LENGTH_LONG).show()
+            }
+
         } else {
-            Toast.makeText(this, "Please enter an expense", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please provide an expense and a location!", Toast.LENGTH_LONG).show()
         }
+
+        // hide keyboard here
+        val imm = getSystemService(
+            Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
     // TODO: Update an author
@@ -175,7 +204,8 @@ class DashboardActivity : AppCompatActivity() {
                     Log.i("TAG", expense.expenseValue)
                     tempSum += expense.expenseValue.toFloat()
                 }
-                editTotalExpenses.text = "Total Expenses: $" + tempSum
+                val tempStr = "%.2f".format(tempSum.toFloat())
+                editTotalExpenses.text = "Total Expenses: $" + tempStr
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
