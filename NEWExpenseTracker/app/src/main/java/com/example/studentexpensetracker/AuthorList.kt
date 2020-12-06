@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 
 
-class AuthorList(private val context: Activity, private var authors: List<Author>) : ArrayAdapter<Author>(context,
-    R.layout.layout_author_list, authors) {
+class AuthorList(private val context: Activity, private var expenses: List<Expense>) : ArrayAdapter<Expense>(context,
+    R.layout.layout_author_list, expenses) {
 
     @SuppressLint("InflateParams", "ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -19,9 +19,9 @@ class AuthorList(private val context: Activity, private var authors: List<Author
         val textViewName = listViewItem.findViewById<View>(R.id.textViewName) as TextView
         val textViewCountry = listViewItem.findViewById<View>(R.id.textViewCountry) as TextView
 
-        val author = authors[position]
-        textViewName.text = author.authorName
-        textViewCountry.text = author.authorCountry
+        val author = expenses[position]
+        textViewName.text = author.expenseValue
+        textViewCountry.text = author.locationName
 
         return listViewItem
     }
