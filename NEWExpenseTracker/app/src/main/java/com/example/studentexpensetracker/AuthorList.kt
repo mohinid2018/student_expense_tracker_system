@@ -21,7 +21,7 @@ class AuthorList(private val context: Activity, private var expenses: List<Expen
 
         val author = expenses[position]
         // textViewName.text = author.expenseValue
-        textViewName.text = "%.2f".format(author.expenseValue.toFloat())
+        textViewName.text = "$" + "%.2f".format(author.expenseValue.toFloat())
         textViewCountry.text = author.locationName
 
         return listViewItem

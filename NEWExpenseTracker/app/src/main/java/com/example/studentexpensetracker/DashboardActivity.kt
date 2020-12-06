@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_dashboard.view.*
-import java.lang.Exception
 import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
@@ -23,7 +23,7 @@ class DashboardActivity : AppCompatActivity() {
     internal lateinit var listViewAuthors: ListView
     //NEW
     private lateinit var editTotalExpenses: TextView
-    internal var totalExpenses: Float = 0F
+    private var totalExpenses: Float = 0F
     //NEW
     internal lateinit var expenses: MutableList<Expense>
 
@@ -72,7 +72,11 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    private fun showUpdateDeleteDialog(expenseID: String, expenseValue: String, locationName: String) {
+    private fun showUpdateDeleteDialog(
+        expenseID: String,
+        expenseValue: String,
+        locationName: String
+    ) {
 
         val dialogBuilder = AlertDialog.Builder(this)
         val inflater = layoutInflater
@@ -86,7 +90,11 @@ class DashboardActivity : AppCompatActivity() {
         val buttonUpdate = dialogView.findViewById<View>(R.id.buttonUpdateAuthor) as Button
         val buttonDelete = dialogView.findViewById<View>(R.id.buttonDeleteAuthor) as Button
 
-        dialogBuilder.setTitle("$$expenseValue at $locationName")
+        // dialogBuilder.setTitle("$$expenseValue at $locationName")
+
+        var tempStrTest = "%.2f".format(expenseValue.toFloat())
+        dialogBuilder.setTitle("$$tempStrTest at $locationName")
+
         val b = dialogBuilder.create()
         b.show()
 
@@ -105,7 +113,11 @@ class DashboardActivity : AppCompatActivity() {
                     updateAuthor(expenseID, uid, expense, location, oldExpenseValue)
                     b.dismiss()
                 } else {
-                    Toast.makeText(this, "Please enter an expense with 0-2 decimal places", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Please enter an expense with 0-2 decimal places",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
@@ -117,11 +129,18 @@ class DashboardActivity : AppCompatActivity() {
             deleteAuthor(expenseID, oldExpenseValue)
             b.dismiss()
         }
+
+        // hide keyboard here
+        val imm = getSystemService(
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
     // TODO: Add an author
     private fun addExpense() {
-        val expense = editTextName.text.toString().trim { it <= ' ' }
+        var expense = editTextName.text.toString().trim { it <= ' ' }
+        expense = expense.substring(1)
         // val location = editLocationName.selectedItem.toString()
         val location =  editLocationName.text.toString().trim { it <= ' ' }
         if (!TextUtils.isEmpty(expense) && !TextUtils.isEmpty((location))) {
@@ -141,7 +160,11 @@ class DashboardActivity : AppCompatActivity() {
 
                 Toast.makeText(this, "Expense added", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "Please enter an expense with 0-2 decimal places", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "Please enter an expense with 0-2 decimal places",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
         } else {
@@ -150,12 +173,19 @@ class DashboardActivity : AppCompatActivity() {
 
         // hide keyboard here
         val imm = getSystemService(
-            Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
     // TODO: Update an author
-    private fun updateAuthor(id: String, uid: String, expense: String, location: String, oldExpenseValue: Float): Boolean {
+    private fun updateAuthor(
+        id: String,
+        uid: String,
+        expense: String,
+        location: String,
+        oldExpenseValue: Float
+    ): Boolean {
         val dR = FirebaseDatabase.getInstance().getReference("expenses").child(uid).child(id)
         val author = Expense(id, expense, location)
         var newExpenseValue = expense.toFloat()
@@ -182,6 +212,13 @@ class DashboardActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
+        editTextName.setOnFocusChangeListener(OnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                editTextName.setText("$")
+                editTextName.setSelection(1)
+            }
+        })
+
         databaseExpenses.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 expenses.clear()
@@ -196,15 +233,15 @@ class DashboardActivity : AppCompatActivity() {
                         expenses.add(expense!!)
                     }
                 }
-                
+
                 val authorAdapter = AuthorList(this@DashboardActivity, expenses)
                 listViewAuthors.adapter = authorAdapter
                 var tempSum = 0F
-                for(expense in expenses){
+                for (expense in expenses) {
                     Log.i("TAG", expense.expenseValue)
                     tempSum += expense.expenseValue.toFloat()
                 }
-                val tempStr = "%.2f".format(tempSum.toFloat())
+                val tempStr = "%.2f".format(tempSum)
                 editTotalExpenses.text = "Total Expenses: $" + tempStr
             }
 
