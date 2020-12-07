@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TracKash</string>
+    <string name="enter_expense">Update Expense Value</string>
+    <string name="enter_expense_value">Expense Value</string>
+    <string name="enter_location_name">Location Name</string>
+    <string name="enter_location">Update Location Name</string>
+    <string name="expense_explanation">Press An Expense to Update/Delete</string>
+    <string name="add">Add New Expense</string>
+    <string name="total_expenses">Total Expenses: </string>
+    <string name="new_expense">Enter a New Expense</string>
+    <string name="delete">Delete</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="register">Register Account</string>
+    <string name="update">Update</string>
+
+</resources>
