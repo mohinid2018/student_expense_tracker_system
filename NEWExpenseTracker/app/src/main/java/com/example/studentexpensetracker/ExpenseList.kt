@@ -7,23 +7,31 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-
-class ExpenseList(private val context: Activity, private var expenses: List<Expense>) : ArrayAdapter<Expense>(context,
+// This file contains a class that stores the content of the second parameter and stores them into
+// their rightful place in the ListView shown in the .xml file
+class ExpenseList(private val mContext: Activity, private var expenses: List<Expense>) : ArrayAdapter<Expense>(mContext,
     R.layout.layout_expense_list, expenses) {
 
     @SuppressLint("InflateParams", "ViewHolder")
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater = context.layoutInflater
-        val listViewExpenses = inflater.inflate(R.layout.layout_expense_list, null, true)
+    override fun getView(pos: Int, v: View?, par: ViewGroup): View {
 
-        val textViewExpenseValue = listViewExpenses.findViewById<View>(R.id.textViewExpenseValue) as TextView
-        val textViewLocationName = listViewExpenses.findViewById<View>(R.id.textViewLocationName) as TextView
+        val layoutInflater = mContext.layoutInflater
+        val listViewExp : View = layoutInflater.inflate(R.layout.layout_expense_list, null, true)
 
-        val expense = expenses[position]
+        // initiates a view for each of the fields represented in our app
+        val expenseValueVw = listViewExp.findViewById<View>(R.id.textViewExpenseValue) as TextView
+        val locationNameVw = listViewExp.findViewById<View>(R.id.textViewLocationName) as TextView
 
-        textViewExpenseValue.text = "$" + "%.2f".format(expense.expenseValue.toFloat())
-        textViewLocationName.text = expense.locationName
+        // Gets a certain position of the expenses list (the second
+        // parameter of the class -- position determined by first parameter
+        val exp = expenses[pos]
 
-        return listViewExpenses
+        // Stores the values appropriately based on their views
+        // NOTE: The value for the expense is stored as you would see with money.
+        // It has a '$' sign (in front) as well as a float that goes only to 2 decimal places
+        expenseValueVw.text = "$" + "%.2f".format(exp.expenseValue.toFloat())
+        locationNameVw.text = exp.locationName
+
+        return listViewExp
     }
 }

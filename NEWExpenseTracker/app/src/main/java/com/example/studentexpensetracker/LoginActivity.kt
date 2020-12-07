@@ -1,9 +1,11 @@
 package com.example.studentexpensetracker
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -14,55 +16,75 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class LoginActivity : AppCompatActivity() {
-    private var mDatabaseReference: DatabaseReference? = null
-    private var mDatabase: FirebaseDatabase? = null
-    private var userEmail: EditText? = null
-    private var userPassword: EditText? = null
-    private var loginBtn: Button? = null
-    private var progressBar: ProgressBar? = null
-
+    private var dR: DatabaseReference? = null
+    private var dB: FirebaseDatabase? = null
     private var mAuth: FirebaseAuth? = null
+
+    /* Represent the user email and password respectively */
+    private var email: EditText? = null
+    private var uPwd: EditText? = null
+
+    /* login button */
+    private var lBtn: Button? = null
+
+    private var progress: ProgressBar? = null
+
+    /* Initializes all the variables necessary to create the login screen */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        mDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mDatabase!!.reference.child("Users")
+        dB = FirebaseDatabase.getInstance()
+        dR = dB!!.reference.child("Users")
         mAuth = FirebaseAuth.getInstance()
 
-        userEmail = findViewById(R.id.email)
-        userPassword = findViewById(R.id.password)
-        loginBtn = findViewById(R.id.login)
-        progressBar = findViewById(R.id.progressBar)
+        email = findViewById(R.id.email)
+        uPwd = findViewById(R.id.password)
+        lBtn = findViewById(R.id.login)
+        progress = findViewById(R.id.progressBar)
 
-        loginBtn!!.setOnClickListener { loginUserAccount() }
+        /* Waits for user to click on login button before running the below method */
+        lBtn!!.setOnClickListener { loginUserAccount() }
     }
 
 
-    private fun loginUserAccount() {
-        progressBar?.visibility ?:  View.VISIBLE
-        val email: String = userEmail?.text.toString()
-        val password: String = userPassword?.text.toString()
 
+    private fun loginUserAccount() {
+        progress?.visibility ?:  View.VISIBLE
+        val email: String = email?.text.toString()
+        val uPwd: String = uPwd?.text.toString()
+
+        /* Makes sure that an email is entered */
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(applicationContext, "Please enter email...", Toast.LENGTH_LONG).show()
             return
         }
-        if (TextUtils.isEmpty(password)) {
+
+        /* Makes sure that a password is entered */
+        if (TextUtils.isEmpty(uPwd)) {
             Toast.makeText(applicationContext, "Please enter password!", Toast.LENGTH_LONG).show()
             return
         }
 
-        mAuth!!.signInWithEmailAndPassword(email, password)
+        /* Verification of inputted values */
+        mAuth!!.signInWithEmailAndPassword(email, uPwd)
             .addOnCompleteListener { task ->
-                progressBar?.visibility ?:  View.GONE
+                progress?.visibility ?:  View.GONE
+                /* If values are both correct */
                 if (task.isSuccessful) {
+
+                    /* hide keyboard here */
+                    val inputMethodMng = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodMng.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+
+                    /* Success Toast & run ExpenseTrackActivity */
                     Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_LONG).show()
 
                     startActivity(
                         Intent(this@LoginActivity, ExpenseTrackActivity::class.java).putExtra(
-                        USER_ID,  mAuth!!.currentUser?.uid))
+                            USER_ID,  mAuth!!.currentUser?.uid))
                 } else {
+                    /* Otherwise, just Fail Toast */
                     Toast.makeText(
                         applicationContext,
                         "Login failed! Please try again later",

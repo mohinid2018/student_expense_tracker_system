@@ -16,79 +16,105 @@ import java.util.*
 
 class ExpenseTrackActivity : AppCompatActivity() {
 
-    private lateinit var editTextExpenseValue: EditText
-    private lateinit var editTextLocationName: EditText
-    private lateinit var buttonAddExpense: Button
-    internal lateinit var listViewExpenses: ListView
-    //NEW
-    private lateinit var editTotalExpenses: TextView
-    private var totalExpenses: Float = 0F
-    //NEW
+    /* Keeps track of the total expense of current list of expenses
+       inputted by user */
+    private var totExp = 0F
+    private lateinit var str: String
+    private lateinit var dBExp: DatabaseReference
     internal lateinit var expenses: MutableList<Expense>
 
-    private lateinit var databaseExpenses: DatabaseReference
+    /* Represents the add button by user to input general expense as well as
+       location */
+    private lateinit var bAdd: Button
 
-    private lateinit var uid: String
+    /* Views that keep track of list of expenses as well as the view
+     containing its total */
+    internal lateinit var expListView: ListView
+    private lateinit var totExpView: TextView
+
+    /* EditTexts that represent where user inputs values for both expense
+     & location */
+    private lateinit var editTextExpenseValue: EditText
+    private lateinit var editTextLocationName: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense_track)
 
-        //getting the reference of artists node
-        databaseExpenses = FirebaseDatabase.getInstance().getReference("expenses")
-        totalExpenses = 0F
+        /* initializes all class variables according */
+        dBExp = FirebaseDatabase.getInstance().getReference("expenses")
+        totExp = 0F
         editTextExpenseValue = findViewById<View>(R.id.editTextExpenseValue) as EditText
         editTextLocationName = findViewById<View>(R.id.editTextLocationName) as EditText
-        listViewExpenses = findViewById<View>(R.id.listViewExpenses) as ListView
-        buttonAddExpense = findViewById<View>(R.id.buttonAddExpense) as Button
-        editTotalExpenses = findViewById<View>(R.id.totalExpensesView) as TextView
+        expListView = findViewById<View>(R.id.listViewExpenses) as ListView
+        bAdd = findViewById<View>(R.id.buttonAddExpense) as Button
+        totExpView = findViewById<View>(R.id.totalExpensesView) as TextView
 
         expenses = ArrayList()
-        uid = intent.getStringExtra(USER_ID)!!
+        str = intent.getStringExtra(USER_ID)!!
 
-        buttonAddExpense.setOnClickListener {
+        /* If user clicks the add button --> go to the add Expense method */
+        bAdd.setOnClickListener {
             addExpense()
         }
 
-        listViewExpenses.onItemClickListener = AdapterView.OnItemClickListener {  _, _, i, _ ->
-            val author = expenses[i]
-            showUpdateDeleteDialog(author.expenseID, author.expenseValue, author.locationName)
+        expListView.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
+            val expense = expenses[i]
+            showUpdateDeleteDialog(expense.expenseID, expense.expenseValue, expense.locationName)
             true
         }
+
     }
 
     private fun showUpdateDeleteDialog(expenseID: String, expenseValue: String, locationName: String) {
         val dialogBuilder = AlertDialog.Builder(this)
-        val inflater = layoutInflater
-        val dialogView = inflater.inflate(R.layout.layout_update_delete, null)
-        dialogBuilder.setView(dialogView)
 
-        val editTextUpdateExpenseValue = dialogView.findViewById<View>(R.id.editTextUpdateExpenseValue) as EditText
+        /* Creates the screen in the form of an AlertDialog */
+        val builder = AlertDialog.Builder(this)
+        val layoutInflater = layoutInflater
+        val dView = layoutInflater.inflate(R.layout.layout_update_delete, null)
+        builder.setView(dView)
+
+        /* Update and delete buttons */
+        val bUpdate = dView.findViewById<View>(R.id.buttonUpdateExpense) as Button
+        val bDelete = dView.findViewById<View>(R.id.buttonDeleteExpense) as Button
+
+        /* Sets up the two field values, expense and location, within this particular
+        * screen --> Its default will be the last expenseValue and last locationName
+        * inputted by user*/
+        val editTextUpdateExpenseValue = dView.findViewById<View>(R.id.editTextUpdateExpenseValue) as EditText
         editTextUpdateExpenseValue.setText(expenseValue)
-        val editTextUpdateLocationName = dialogView.findViewById<View>(R.id.editTextUpdateLocationName) as EditText
+        val editTextUpdateLocationName = dView.findViewById<View>(R.id.editTextUpdateLocationName) as EditText
         editTextUpdateLocationName.setText(locationName)
-        val buttonUpdate = dialogView.findViewById<View>(R.id.buttonUpdateExpense) as Button
-        val buttonDelete = dialogView.findViewById<View>(R.id.buttonDeleteExpense) as Button
+
+        /* Sets the title of the screen to something like $10.10 (current expense)
+          at Lowes (location name)*/
+        builder.setTitle("$$expenseValue at $locationName")
 
 
-        dialogBuilder.setTitle("$$expenseValue at $locationName")
-
-        val b = dialogBuilder.create()
+        val b = builder.create()
         b.show()
 
         var oldExpenseValue = expenseValue.toFloat()
 
-        buttonUpdate.setOnClickListener {
+        /* If update is clicked, the updateExpense method is called and the two fields
+               * will be reset to reflect one or both of the changed values by user*/
+        bUpdate.setOnClickListener {
             val expense = editTextUpdateExpenseValue.text.toString().trim{it <= ' '}
             val location = editTextUpdateLocationName.text.toString().trim{it <= ' '}
 
+            /* Regex -- Allows for text to contain a number with 0, 1, or 2 decimal points */
             val expenseRegex = Regex("\\d+" + "(\\.\\d{1,2})?")
 
+
             if (!TextUtils.isEmpty(expense) && !TextUtils.isEmpty(location)) {
+
+                /* Uses regex as condition before update */
                 if (expenseRegex.matches((expense))) {
-                    updateExpense(expenseID, uid, expense, location, oldExpenseValue)
+                    updateExpense(expenseID, str, expense, location, oldExpenseValue)
                     b.dismiss()
                 } else {
+                    /* If user fails to meet the regex requirements, this toast is shown */
                     Toast.makeText(
                         this,
                         "Enter the expense as a whole number or with 1-2 decimal places",
@@ -97,10 +123,11 @@ class ExpenseTrackActivity : AppCompatActivity() {
                 }
             }
 
-
         }
 
-        buttonDelete.setOnClickListener {
+        /* If delete is clicked, the deleteExpense method is called and the view with the two fields
+       * will be deleted*/
+        bDelete.setOnClickListener {
             deleteExpense(expenseID, oldExpenseValue)
             b.dismiss()
         }
@@ -112,26 +139,33 @@ class ExpenseTrackActivity : AppCompatActivity() {
 
     private fun addExpense() {
         var expense = editTextExpenseValue.text.toString().trim { it <= ' ' }
+
+        /* Ignore the first character ($) */
         if (expense.isNotEmpty()) {
             expense = expense.substring(1)
         }
 
-        val location =  editTextLocationName.text.toString().trim { it <= ' ' }
-        if (expense != "$" && !TextUtils.isEmpty(expense) && !TextUtils.isEmpty((location))) {
+        val loc =  editTextLocationName.text.toString().trim { it <= ' ' }
+
+        /* Checks if not empty before using regex to properly add the value */
+        if (expense != "$" && !TextUtils.isEmpty(expense) && !TextUtils.isEmpty((loc))) {
             val expenseRegex = Regex("\\d+" + "(\\.\\d{1,2})?")
 
             if (expenseRegex.matches((expense))) {
-                val id = databaseExpenses.push().key
-                val expenseObj = Expense(id!!, expense, location)
+
+                val id = dBExp.push().key
+                val expenseObj = Expense(id!!, expense, loc)
                 val newExpense = expense.toFloat()
-                totalExpenses += newExpense
-                editTotalExpenses.text = "Total Expenses: $$totalExpenses"
-                databaseExpenses.child(uid).child(id).setValue(expenseObj)
+
+                /* Accommodates the new expense into the total sum accounted by app */
+                totExp += newExpense
+                if (totExp != newExpense)
+                    totExpView.text = "Total Expenses: $$totExp"
+                dBExp.child(str).child(id).setValue(expenseObj)
                 editTextExpenseValue.setText("")
                 editTextLocationName.setText("")
 
-
-
+                /* Success Toast */
                 Toast.makeText(this, "Expense added", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(
@@ -150,30 +184,44 @@ class ExpenseTrackActivity : AppCompatActivity() {
         inputMethodMng.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
+    /* Is called in the dialog method above; used to update a certain expense and/or location */
     private fun updateExpense(id: String, uid: String, expense: String, location: String, oldExpenseValue: Float): Boolean {
-        val dR = FirebaseDatabase.getInstance().getReference("expenses").child(uid).child(id)
-        val expenseObject = Expense(id, expense, location)
+        /* goes to particular place */
+        val dB = FirebaseDatabase.getInstance().getReference("expenses").child(uid).child(id)
+        /* creates new expense object */
+        val expObj = Expense(id, expense, location)
         var newExpenseValue = expense.toFloat()
-        totalExpenses -= oldExpenseValue
-        totalExpenses += newExpenseValue
-        editTotalExpenses.text = "Total Expenses: $$totalExpenses"
-        dR.setValue(expenseObject)
+
+        /* Updates the total expense value */
+        totExp -= oldExpenseValue
+        totExp += newExpenseValue
+        totExpView.text = "Total Expenses: $$totExp"
+
+        /* places new object in our database */
+        dB.setValue(expObj)
+
+        /* Success Toast */
         Toast.makeText(applicationContext, "Expense Updated", Toast.LENGTH_LONG).show()
         return true
     }
 
     private fun deleteExpense(id: String, oldExpenseValue: Float): Boolean {
-        val dR = FirebaseDatabase.getInstance().getReference("expenses").child(uid).child(id)
-        totalExpenses -= oldExpenseValue
-        editTotalExpenses.text = "Total Expenses: $$totalExpenses"
-        dR.removeValue()
+        /* goes to particular place in database */
+        val dB = FirebaseDatabase.getInstance().getReference("expenses").child(str).child(id)
+
+        /* updates the total value in both the total expense and deletes instance in database*/
+        totExp -= oldExpenseValue
+        totExpView.text = "Total Expenses: $$totExp"
+        dB.removeValue()
+
+        /* Success Toast */
         Toast.makeText(applicationContext, "Expense Deleted", Toast.LENGTH_LONG).show()
         return true
     }
 
     override fun onStart() {
         super.onStart()
-
+        /* Once user clicks on first box -- an automatic '$' sign will appear */
         editTextExpenseValue.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 editTextExpenseValue.setText("$")
@@ -181,23 +229,28 @@ class ExpenseTrackActivity : AppCompatActivity() {
             }
         }
 
-        databaseExpenses.addValueEventListener(object : ValueEventListener {
+        /* Lets database keep track of adds of expense */
+        dBExp.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 expenses.clear()
 
                 var expense: Expense? = null
-                for (postSnapshot in dataSnapshot.child(uid).children) {
+                for (postSnapshot in dataSnapshot.child(str).children) {
                     try {
                         expense = postSnapshot.getValue(Expense::class.java)
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
                     } finally {
+                        /* Incorporates the Expense object into list */
                         expenses.add(expense!!)
                     }
                 }
 
                 val expenseAdapter = ExpenseList(this@ExpenseTrackActivity, expenses)
-                listViewExpenses.adapter = expenseAdapter
+                expListView.adapter = expenseAdapter
+
+
+                /* Adds up all the current expenses together into one number */
                 var expenseSum = 0F
 
                 for (expense in expenses) {
@@ -205,8 +258,10 @@ class ExpenseTrackActivity : AppCompatActivity() {
 
                     expenseSum += expense.expenseValue.toFloat()
                 }
+
+                /* Incorporates this total into the text of the total expense view */
                 val expenseSumStr = "%.2f".format(expenseSum)
-                editTotalExpenses.text = "Total Expenses: $$expenseSumStr"
+                totExpView.text = "Total Expenses: $$expenseSumStr"
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
