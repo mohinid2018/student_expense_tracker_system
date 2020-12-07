@@ -20,7 +20,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
         android:textColor="#6363E6"
         android:background="#D0D0D0"
         android:textStyle="bold"
@@ -32,7 +31,7 @@
         android:layout_height="47dp"
         android:textColor="#000000"
         android:background="#FFFFFF"
-        android:hint="  Email"
+        android:hint="  Valid Email"
         android:inputType="textEmailAddress"
         android:importantForAutofill="no" />
 
@@ -51,7 +50,7 @@
         android:layout_height="42dp"
         android:textColor="#000000"
         android:background="#FFFFFF"
-        android:hint="  Password"
+        android:hint="  Valid Password 6-12 Characters (1 number, letter, symbol)"
         android:inputType="textPassword"
         android:importantForAutofill="no" />
 

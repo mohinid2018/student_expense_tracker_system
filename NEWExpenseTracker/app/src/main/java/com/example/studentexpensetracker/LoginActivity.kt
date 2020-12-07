@@ -38,9 +38,7 @@ class LoginActivity : AppCompatActivity() {
         loginBtn!!.setOnClickListener { loginUserAccount() }
     }
 
-    // TODO: Allow the user to log into their account
-    // If the email and password are not empty, try to log in
-    // If the login is successful, store info into intent and launch DashboardActivity
+
     private fun loginUserAccount() {
         progressBar?.visibility ?:  View.VISIBLE
         val email: String = userEmail?.text.toString()
@@ -59,12 +57,10 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 progressBar?.visibility ?:  View.GONE
                 if (task.isSuccessful) {
-                    Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_LONG)
-                        .show()
-// pass the mAuth.uid via an intent
-//                    mAuth!!.currentUser?.uid
+                    Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_LONG).show()
+
                     startActivity(
-                        Intent(this@LoginActivity, DashboardActivity::class.java).putExtra(
+                        Intent(this@LoginActivity, ExpenseTrackActivity::class.java).putExtra(
                         USER_ID,  mAuth!!.currentUser?.uid))
                 } else {
                     Toast.makeText(
@@ -77,7 +73,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val USER_EMAIL = "com.example.tesla.myhomelibrary.useremail"
         const val USER_ID = "com.example.tesla.myhomelibrary.userid"
     }
 }

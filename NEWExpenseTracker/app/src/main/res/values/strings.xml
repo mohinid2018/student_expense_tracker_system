@@ -1,31 +1,18 @@
 <resources>
     <string name="app_name">TracKash</string>
-    <array name="countries">
-        <item name="america">America</item>
-        <item name="france">France</item>
-        <item name="spain">Spain</item>
-        <item name="columbia">Columbia</item>
-        <item name="russia">Russia</item>
-    </array>
-
     <string name="enter_expense">Update Expense Value</string>
-    <string name="enter_title_name">Enter title name</string>
-    <string name="enter_expense_value">Enter Expense (i.e. put 5.30 for $5.30)</string>
-    <string name="enter_location_name">Enter Location Name (i.e. McDonald\'s)</string>
+    <string name="enter_expense_value">Expense Value</string>
+    <string name="enter_location_name">Location Name</string>
     <string name="enter_location">Update Location Name</string>
-    <string name="add_titles">Add Titles</string>
-    <string name="expense_explanation">Press and hold an expense to edit it</string>
-    <string name="one">1</string>
-    <string name="add">Add</string>
+    <string name="expense_explanation">Press An Expense to Update/Delete</string>
+    <string name="add">Add New Expense</string>
     <string name="total_expenses">Total Expenses: </string>
+    <string name="new_expense">Enter a New Expense</string>
     <string name="delete">Delete</string>
     <string name="email">Email</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="register">Register An Account</string>
-    <string name="titles">Titles</string>
     <string name="update">Update</string>
 
-    <string name="test_author">Ivo Andric</string>
-    <string name="test_country">Kingdom of Yugoslavia</string>
 </resources>

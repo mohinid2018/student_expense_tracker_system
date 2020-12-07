@@ -6,7 +6,7 @@
     android:padding="@dimen/activity_horizontal_margin">
 
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/editTextUpdateExpenseValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_expense"
@@ -14,7 +14,7 @@
         android:importantForAutofill="no" />
 
     <EditText
-        android:id="@+id/editLocationName"
+        android:id="@+id/editTextUpdateLocationName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_location"
@@ -28,7 +28,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/buttonUpdateAuthor"
+            android:id="@+id/buttonUpdateExpense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:text="@string/update" />
 
         <Button
-            android:id="@+id/buttonDeleteAuthor"
+            android:id="@+id/buttonDeleteExpense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

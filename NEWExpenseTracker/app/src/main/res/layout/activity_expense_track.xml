@@ -9,37 +9,50 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#010147"
-    tools:context="com.example.studentexpensetracker.DashboardActivity">
+    tools:context="com.example.studentexpensetracker.ExpenseTrackActivity">
 
-
-    <EditText
-        android:id="@+id/editTextName"
+    <TextView
+        android:id="@+id/newExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_expense_value"
+        android:background="#D0D0D0"
+        android:textStyle="bold"
+        android:text="@string/new_expense"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textAlignment="center"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/editTextExpenseValue"
+        android:layout_below="@id/newExpense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="  Expense Value"
         android:background="#FFFFFF"
+        android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:inputType="text"
         android:importantForAutofill="no" />
 
     <EditText
-        android:id="@+id/editLocationName"
+        android:id="@+id/editTextLocationName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextName"
-        android:layout_marginTop="14dp"
+        android:layout_below="@id/editTextExpenseValue"
         android:background="#FFFFFF"
-        android:hint="@string/enter_location_name"
+        android:hint="  Location Name"
         android:importantForAutofill="no"
         android:inputType="text"
+        android:paddingTop="10dp"
         android:paddingBottom="10dp" />
 
     <Button
         android:id="@+id/buttonAddExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editLocationName"
-        android:layout_marginTop="24dp"
+        android:layout_below="@id/editTextLocationName"
+        android:layout_marginTop="10dp"
         android:background="#6363E6"
         android:text="@string/add"
         android:textColor="#FFFFFF" />
@@ -49,29 +62,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonAddExpense"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="24dp"
         android:background="#D0D0D0"
-        android:padding="@dimen/activity_horizontal_margin"
+        android:textStyle="bold"
         android:text="@string/total_expenses"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:textAlignment="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textColor="#000000" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/expenseSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/totalExpensesView"
+        android:layout_marginTop="24dp"
+        android:background="#D0D0D0"
+        android:textStyle="bold"
         android:text="@string/expense_explanation"
-        android:textAlignment="center" />
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textAlignment="center"
+        android:textColor="#000000" />
 
     <ListView
-        android:id="@+id/listViewAuthors"
+        android:id="@+id/listViewExpenses"
         android:layout_width="wrap_content"
-        android:layout_height="432dp"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="-11dp"
-        android:background="#D0D0D0"
+        android:layout_height="450dp"
+        android:layout_below="@+id/expenseSummary"
+        android:background="#FFFFFF"
         android:textColor="#000000" />
 
 </RelativeLayout>

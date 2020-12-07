@@ -22,8 +22,7 @@
         </activity>
         <activity android:name="com.example.studentexpensetracker.LoginActivity" />
         <activity android:name="com.example.studentexpensetracker.RegistrationActivity" />
-        <activity android:name="com.example.studentexpensetracker.DashboardActivity" />
-        <activity android:name="com.example.studentexpensetracker.AuthorActivity" />
+        <activity android:name="com.example.studentexpensetracker.ExpenseTrackActivity" />
     </application>
 
 </manifest>

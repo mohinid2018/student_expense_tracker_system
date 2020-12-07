@@ -4,16 +4,16 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="@string/test_author"
+        android:id="@+id/textViewExpenseValue"
+        android:text=""
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:id="@+id/textViewName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:text="@string/test_country"
+        android:id="@+id/textViewLocationName"
+        android:text=""
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:id="@+id/textViewCountry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
