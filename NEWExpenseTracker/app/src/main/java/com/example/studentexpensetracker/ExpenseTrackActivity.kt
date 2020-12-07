@@ -71,8 +71,7 @@ class ExpenseTrackActivity : AppCompatActivity() {
         val buttonDelete = dialogView.findViewById<View>(R.id.buttonDeleteExpense) as Button
 
 
-        var expenseValStr = "%.2f".format(expenseValue.toFloat())
-        dialogBuilder.setTitle("$$expenseValStr at $locationName")
+        dialogBuilder.setTitle("$$expenseValue at $locationName")
 
         val b = dialogBuilder.create()
         b.show()
@@ -200,8 +199,10 @@ class ExpenseTrackActivity : AppCompatActivity() {
                 val expenseAdapter = ExpenseList(this@ExpenseTrackActivity, expenses)
                 listViewExpenses.adapter = expenseAdapter
                 var expenseSum = 0F
+
                 for (expense in expenses) {
                     Log.i("TAG", expense.expenseValue)
+
                     expenseSum += expense.expenseValue.toFloat()
                 }
                 val expenseSumStr = "%.2f".format(expenseSum)

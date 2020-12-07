@@ -20,7 +20,7 @@ class ExpenseList(private val context: Activity, private var expenses: List<Expe
         val textViewLocationName = listViewExpenses.findViewById<View>(R.id.textViewLocationName) as TextView
 
         val expense = expenses[position]
-        // textViewName.text = author.expenseValue
+
         textViewExpenseValue.text = "$" + "%.2f".format(expense.expenseValue.toFloat())
         textViewLocationName.text = expense.locationName
 
